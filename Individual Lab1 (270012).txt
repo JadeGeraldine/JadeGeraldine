@@ -1,0 +1,229 @@
+import 'dart:math';
+import 'package:flutter/material.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatefulWidget 
+  {
+   @override
+  _MyAppState createState() => _MyAppState(); 
+  }
+
+class _MyAppState extends State<MyApp> 
+  {int _radioValue=0;
+   String currentabsi="";
+   double absi=0.0;
+   TextEditingController hController = new TextEditingController();
+   TextEditingController wController = new TextEditingController();
+   TextEditingController wcController = new TextEditingController();
+  
+   @override
+   Widget build(BuildContext context) 
+    {return MaterialApp(
+     title: 'A BODY SHAPE INDEX (ABSI)',
+     home: Scaffold(
+        backgroundColor: Colors.green[100],
+        appBar: AppBar(
+          backgroundColor: Colors.green[900],
+          title: Text('A BODY SHAPE INDEX (ABSI)',
+                 style: TextStyle(fontWeight:FontWeight.bold,fontSize: 30),
+                 ),
+        ),
+      body: SingleChildScrollView(
+            
+      child: 
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: 
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(height: 20,),
+              
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Sex", style: TextStyle(fontSize: 25)),
+                  Radio(value: 0,
+                        groupValue: _radioValue,
+                        onChanged: _handleRadioValueChange,
+                       ),
+                  Text('Male', style: TextStyle(fontSize: 20),),
+                  Radio(value: 1,
+                        groupValue: _radioValue,
+                        onChanged: _handleRadioValueChange,
+                       ),
+                  Text('Female', style: TextStyle(fontSize: 20),),
+                ]
+              ),
+              
+              SizedBox(height: 10,),
+              
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Age", style: TextStyle(fontSize: 25)),
+                  Container(
+                    width: 150,
+                    child: TextField(
+                    keyboardType: TextInputType.number,
+                    textAlign: TextAlign.center,
+                    decoration: InputDecoration(
+                      hintText: "years",
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(50)
+                      ),
+                    ),
+                    ),
+                  )
+               ],
+              ),
+              
+              SizedBox(height: 10,),
+              
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Height", style: TextStyle(fontSize: 25)),
+                  Container(
+                    width: 150,
+                    child: TextField(
+                    keyboardType: TextInputType.number,
+                    controller: hController,
+                    textAlign: TextAlign.center,
+                    decoration: InputDecoration(
+                      hintText: "cm",
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(50)
+                      ),
+                    ),
+                    ),
+                  )
+               ],
+              ),
+              
+              SizedBox(height: 10,),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Weight", style: TextStyle(fontSize: 25)),
+                  Container(
+                    width: 150,
+                    child: TextField(
+                    keyboardType: TextInputType.number,
+                    controller: wController,
+                    textAlign: TextAlign.center,
+                    decoration: InputDecoration(
+                      hintText: "kg",
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(50)
+                      ),
+                    ),
+                    ),
+                  )
+               ],
+              ), 
+              
+              SizedBox(height: 10,),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Waist Circumference", style: TextStyle(fontSize: 25)),
+                  Container(
+                    width: 150,
+                    child: TextField(
+                    keyboardType: TextInputType.number,
+                    controller: wcController,
+                    textAlign: TextAlign.center,
+                    decoration: InputDecoration(
+                      hintText: "cm",
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(50)
+                      ),
+                    ),
+                    ),
+                  )
+               ],
+              ), 
+              
+              SizedBox(height: 40,),
+              
+              Container(
+                color: Colors.green[900].withOpacity(0.2),
+                width: double.infinity,
+                child: TextButton(
+                  onPressed: () 
+                    {double height = double.parse(hController.value.text);
+                     double weight = double.parse(wController.value.text);
+                     double waist = double.parse(wcController.value.text);
+                     calculate(height, weight, waist);
+                    },
+                  child: Text("RESULTS",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(color: Colors.black,
+                              fontSize: 30.0, fontWeight: FontWeight.bold,),
+                        ),
+                ),
+              ),
+              
+              SizedBox(height: 10,),
+              
+              Container(
+                width: double.infinity,
+                child: Text("ABSI",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(color: Colors.black,
+                            fontSize: 20.0, fontWeight: FontWeight.bold,),
+                      ),
+              ),
+              
+              Container(
+                width: double.infinity,
+                child: Text('$currentabsi',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.black,
+                            fontSize: 25.0, fontWeight: FontWeight.bold,),
+                ),
+              ),
+
+            ],
+          ),
+      ),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
+    ));
+    }
+
+void calculate(double height, double weight,double waist)
+  {double absi2 = (waist/100) / (pow( weight/(pow((height/100),2) ),2/3) * pow( (height/100) ,1/2));
+   String absi = absi2.toStringAsFixed(5);
+   
+   setState(()
+    {currentabsi = absi;
+    });
+  }
+          
+  void _handleRadioValueChange(int value) 
+    {setState(() 
+      {_radioValue = value;
+
+       switch (_radioValue) 
+        {case 0:
+            break;
+         case 1:
+            break;
+        }
+      });
+    }
+}
+
